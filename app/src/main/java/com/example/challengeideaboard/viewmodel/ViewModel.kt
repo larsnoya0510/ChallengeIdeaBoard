@@ -178,3 +178,37 @@ class PushGoodViewModel() : ViewModel() {
         return errorMessage
     }
 }
+class PushMsgViewModel() : ViewModel() {
+    private var pushMsgResponseData = MutableLiveData<DataModel.ResponsePushMsg>()
+    private var pushMsgResponseDataTrigger = MutableLiveData<Int>()
+    private var errorMessage = MutableLiveData<String>()
+    fun RequestPushMsg(token:String,author:String,content:String){
+        APIFunction.pushMsg(DataModel.PushMsgBody(token,author,content),this)
+    }
+    fun setPushMsgResponseDataTrigger(result: Int,mData: DataModel.ResponsePushMsg) {
+        pushMsgResponseDataTrigger.value=result
+        setResponse(mData)
+    }
+    fun setPushMsgResponseDataTrigger(result: Int) {
+        pushMsgResponseDataTrigger.value=result
+    }
+    fun setPushMsgResponseDataTrigger(result: Int,mErrorMeaasge:String) {
+        pushMsgResponseDataTrigger.value=result
+        setErrorMessage(mErrorMeaasge)
+    }
+    fun setErrorMessage(mErrorMeaasge:String){
+        errorMessage.value=mErrorMeaasge
+    }
+    fun setResponse( mData: DataModel.ResponsePushMsg) {
+        pushMsgResponseData.value=mData
+    }
+    fun getpushMsgResponseData(): MutableLiveData<DataModel.ResponsePushMsg> {
+        return pushMsgResponseData
+    }
+    fun getData(): MutableLiveData<Int> {
+        return pushMsgResponseDataTrigger
+    }
+    fun getErrorMessage(): MutableLiveData<String> {
+        return errorMessage
+    }
+}

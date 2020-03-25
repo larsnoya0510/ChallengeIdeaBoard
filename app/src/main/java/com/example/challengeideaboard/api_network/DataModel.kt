@@ -178,6 +178,33 @@ object DataModel {
         @SerializedName("id")
         val id: Int
     )
+    data class PushMsgBody(
+        var token: String,
+        var author :String,
+        var content: String
+    )
+    data class ResponsePushMsg(
+        @Expose
+        @SerializedName("info")
+        val info: String,
+        @Expose
+        @SerializedName("Board")
+        val action: Board?
+    )
+    data class Board(
+        @Expose
+        @SerializedName("author")
+        val author: String,
+        @Expose
+        @SerializedName("content")
+        val content: String,
+        @Expose
+        @SerializedName("create_time")
+        val create_time: String,
+        @Expose
+        @SerializedName("id")
+        val id: Int
+    )
 ///=============================
 
 //    data class Address(

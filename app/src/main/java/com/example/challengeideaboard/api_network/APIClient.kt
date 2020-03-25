@@ -3,7 +3,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiClient {
-    var BASE_URL:String="http://1aa6fcf9.ngrok.io"
+    var BASE_URL:String="http://f55dbedf.ngrok.io"
     val getClient: ApiInterface
         get() {
             val retrofit = Retrofit.Builder()

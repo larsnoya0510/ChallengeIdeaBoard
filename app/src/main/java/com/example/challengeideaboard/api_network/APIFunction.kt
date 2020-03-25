@@ -132,70 +132,30 @@ class APIFunction {
                 }
             })
         }
-//        fun signUp(signUpBody:DataModel.signUpBody, viewModel: SignUpViewModel){
-////            var signUpData=DataModel.signUpBody(account,password,verify_code,role,gender,first_name,last_name)
-//            val call: Call<Void> = ApiClient.getClient.signUp(signUpBody)
-//            call.enqueue(object : Callback<Void> {
-//                override fun onResponse(call: Call<Void>?, response: Response<Void>?) {
-//                    if (response!!.isSuccessful) { // 2XX
-//                        viewModel.setSignUpResult("200 Successful")
-//
-//                    } else {
-////                        viewModel.setSignUpResult(response.message())
-//                        viewModel.setSignUpResult(returnResponseErrorBody(response.errorBody().string()))
-//                    }
-//                }
-//
-//                override fun onFailure(call: Call<Void>?, t: Throwable?) {
-////                    viewModel.setSignUpResult(t.toString())
-//                    viewModel.setSignUpResult(APIResponseMessage.onFailure)
-//                }
-//            })
-//        }
-//        fun login(loginBodyData:DataModel.LoginBody, viewModel: LoginViewModel){
-////            var loginBodyData=DataModel.LoginBody(account,password,role)
-//            val call: Call<DataModel.ResponseLogin> = ApiClient.getClient.loginAccount(loginBodyData)
-//            call.enqueue(object : Callback<DataModel.ResponseLogin> {
-//                override fun onResponse(call: Call<DataModel.ResponseLogin>?, response: Response<DataModel.ResponseLogin>?) {
-//                    if (response!!.isSuccessful) { // 2XX
-////                        viewModel.setLoginResult("200 Successful")
-//                        viewModel.setResponse("200 Successful",response.body())
-//
-//                    } else {
-//                        viewModel.setLoginResult(returnResponseErrorBody(response.errorBody().string()))
-//
-////                        viewModel.setLoginResult(response.message())
-////                        viewModel.setLoginResult(response.errorBody())
-//
-//                    }
-//                }
-//
-//                override fun onFailure(call: Call<DataModel.ResponseLogin>?, t: Throwable?) {
-////                    viewModel.setLoginResult(t.toString())
-//                    viewModel.setLoginResult(APIResponseMessage.onFailure)
-//                }
-//            })
-//        }
-//        fun getProfile(getProfileBodyData:DataModel.getProfileBody,viewModel : GetProfileViewModel){
-////            var getProfileData=DataModel.getProfileBody(token,id)
-//            val call: Call<DataModel.responseProfile> = ApiClient.getClient.getProfile(getProfileBodyData.token,getProfileBodyData.id)
-//            call.enqueue(object : Callback<DataModel.responseProfile> {
-//                override fun onResponse(call: Call<DataModel.responseProfile>?, response: Response<DataModel.responseProfile>?) {
-//                    if (response!!.isSuccessful) { // 2XX
-//                        viewModel.setResponse("200",response.body())
-//
-//                    } else {
-////                        viewModel.setGetProfileResult(response.code().toString())
-//                        viewModel.setGetProfileResult(returnResponseErrorBody(response.errorBody().string()))
-//                    }
-//                }
-//
-//                override fun onFailure(call: Call<DataModel.responseProfile>?, t: Throwable?) {
-////                    viewModel.setGetProfileResult(t.toString())
-//                    viewModel.setGetProfileResult(APIResponseMessage.onFailure)
-//                }
-//            })
-//        }
+        fun pushMsg(pushMsgBodyData: DataModel.PushMsgBody, viewModel: PushMsgViewModel) {
+            val call: Call<DataModel.ResponsePushMsg> =
+                ApiClient.getClient.pushMsg(pushMsgBodyData.token,pushMsgBodyData)
+            call.enqueue(object : Callback<DataModel.ResponsePushMsg> {
+                override fun onResponse(
+                    call: Call<DataModel.ResponsePushMsg>?,
+                    response: Response<DataModel.ResponsePushMsg>
+                ) {
+                    if (response!!.isSuccessful) { // 2XX
+                        viewModel.setPushMsgResponseDataTrigger(200, response.body())
+
+                    } else {
+                        viewModel.setPushMsgResponseDataTrigger(
+                            response!!.code(),
+                            response.errorBody().string()
+                        )
+                    }
+                }
+
+                override fun onFailure(call: Call<DataModel.ResponsePushMsg>?, t: Throwable?) {
+                    viewModel.setErrorMessage(APIResponseMessage.onFailure)
+                }
+            })
+        }
     }
 
 }

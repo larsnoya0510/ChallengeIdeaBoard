@@ -56,13 +56,16 @@ class BoardRecyclerViewAdapter(
             createTimeTextView.text=mInList[position].create_time
             contentTextView.text=mInList[position].content
             goodsCountTextView.text=mInList[position].goods_count.toString()
-            msgsCountTextView.text=mInList[position].msgs_count.toString()
+            msgsCountTextView.text="${mInList[position].msgs_count.toString()}"
             authorTextView.text=mInList[position].author
             replyFirstRecyclerView.layoutManager=LinearLayoutManager(context)
             replyFirstRecyclerView.adapter=ReplyFirstRecyclerViewAdapter(context,mInList[position].msgs)
 
             pushGoodConstraintLayout.setOnClickListener {
                 mOnItemCheckListener!!.onCLickGood(mInList[position].id, SharePreferenceUtil.getUser(context))
+            }
+            pushMsgConstraintLayout.setOnClickListener {
+                mOnItemCheckListener!!.onClickMsg(SharePreferenceUtil.getUser(context),msgTagTextView.text.toString())
             }
 //            cardViewLinearLayout.setOnClickListener {
 //                mOnItemCheckListener!!.onCheck(mInList[position].book_id)
@@ -79,6 +82,7 @@ class BoardRecyclerViewAdapter(
 //        fun onCheck(workId: Int)
 //        fun onStarClick(workId: Int, mutableList: MutableList<DataModel.EditorRecommandItem>,collectionState:Int)
         fun onCLickGood(mBoardId: Int,mUserName :String)
+        fun onClickMsg(mUserName :String,mContent: String)
     }
 
     fun setOnItemCheckListener(mOnItemCheckListener: OnItemCheckListener) {

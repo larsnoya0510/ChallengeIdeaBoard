@@ -1,11 +1,16 @@
 package com.example.challengeideaboard
 
 
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE
+import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -14,7 +19,18 @@ import com.example.challengeideaboard.api_network.DataModel
 import com.example.challengeideaboard.api_network.SharePreferenceUtil
 import com.example.challengeideaboard.viewmodel.BoardViewModel
 import com.example.challengeideaboard.viewmodel.PushGoodViewModel
+import com.example.challengeideaboard.viewmodel.PushMsgViewModel
 import kotlinx.android.synthetic.main.fragment_idea_board.view.*
+import android.view.inputmethod.InputMethodManager.HIDE_NOT_ALWAYS
+import android.app.Activity
+import android.app.AlertDialog
+import android.content.Context
+import android.content.Context.INPUT_METHOD_SERVICE
+import android.content.DialogInterface
+import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.lifecycle.ViewModel
+
 
 /**
  * A simple [Fragment] subclass.
@@ -28,6 +44,10 @@ class IdeaBoardFragment : Fragment() {
     lateinit var mPushGoodViewModelTriggerObserver: Observer<Int>
     lateinit var mPushGoodViewModelObserver: Observer<DataModel.ResponsePushGood>
 
+    lateinit var mPushMsgViewModelViewModel: PushMsgViewModel
+    lateinit var mPushMsgViewModelTriggerObserver: Observer<Int>
+    lateinit var mPushMsgViewModelObserver: Observer<DataModel.ResponsePushMsg>
+
     lateinit var IdeaBoardFragmentRootView:View
     lateinit var mAdapter:BoardRecyclerViewAdapter
     override fun onCreateView(
@@ -36,8 +56,30 @@ class IdeaBoardFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         IdeaBoardFragmentRootView= inflater.inflate(R.layout.fragment_idea_board, container, false)
+//        IdeaBoardFragmentRootView.postEditText.setImeOptions(EditorInfo.IME_ACTION_SEND)
+        IdeaBoardFragmentRootView.postEditText.setInputType(TYPE_TEXT_FLAG_MULTI_LINE)
+        IdeaBoardFragmentRootView.postEditText.setSingleLine(false)
+        IdeaBoardFragmentRootView.postEditText.setMaxLines(4)
+        IdeaBoardFragmentRootView.postImageView.setOnClickListener {
+            var token="Bearer ${SharePreferenceUtil.getUserToken(context!!)}111"
+            var user = SharePreferenceUtil.getUser(context!!)
+            if(SharePreferenceUtil.getUserToken(context!!).isNullOrEmpty()){
+                Toast.makeText(context,"請先登入",Toast.LENGTH_SHORT).show()
+            }
+            else {
+                mPushMsgViewModelViewModel.RequestPushMsg(token, user, IdeaBoardFragmentRootView.postEditText.text.toString())
+                //            Toast.makeText(context,IdeaBoardFragmentRootView.postEditText.text.toString(),Toast.LENGTH_SHORT).show()
+                collapseKeyboard()
+                IdeaBoardFragmentRootView.postEditText.text.clear()
+            }
+
+        }
         mAdapter=BoardRecyclerViewAdapter(this.context!!, mutableListOf<DataModel.BoardItem>())
         mAdapter.setOnItemCheckListener(object : BoardRecyclerViewAdapter.OnItemCheckListener{
+            override fun onClickMsg(mUserName: String, mContent: String) {
+
+            }
+
             override fun onCLickGood(mBoardId: Int, mUserName: String) {
                 var token="Bearer ${SharePreferenceUtil.getUserToken(context!!)}"
                 if(SharePreferenceUtil.getUserToken(context!!).isNullOrEmpty()){
@@ -58,11 +100,12 @@ class IdeaBoardFragment : Fragment() {
                 200-> {
                     mBoardViewModelViewModel.setBoardResponseDataTrigger(0)
                 }
-                403-> {
-
-                }
+//                403-> {
+//
+//                }
                 else ->{
-
+                    var error=mBoardViewModelViewModel.getErrorMessage().value
+                    showAlertDialog(error)
                 }
             }
         }
@@ -78,11 +121,12 @@ class IdeaBoardFragment : Fragment() {
                 200-> {
                     mPushGoodViewModelViewModel.setPushGoodResponseDataTrigger(0)
                 }
-                403-> {
-
-                }
+//                403-> {
+//
+//                }
                 else ->{
-
+                    var error=mPushGoodViewModelViewModel.getErrorMessage().value
+                    showAlertDialog(error)
                 }
             }
         }
@@ -91,7 +135,49 @@ class IdeaBoardFragment : Fragment() {
         }
         mPushGoodViewModelViewModel.getData().observe(viewLifecycleOwner, mPushGoodViewModelTriggerObserver)
         mPushGoodViewModelViewModel.getpushGoodResponseData().observe(viewLifecycleOwner, mPushGoodViewModelObserver)
+
+        mPushMsgViewModelViewModel= ViewModelProvider(this).get(PushMsgViewModel::class.java)
+        mPushMsgViewModelTriggerObserver = Observer {
+            when(it){
+                200-> {
+                    mPushMsgViewModelViewModel.setPushMsgResponseDataTrigger(0)
+                }
+//                403-> {
+//
+//                }
+                else ->{
+                    var error=mPushMsgViewModelViewModel.getErrorMessage().value
+                    showAlertDialog(error)
+                }
+            }
+        }
+        mPushMsgViewModelObserver = Observer {
+            mBoardViewModelViewModel.RequestBoard()
+        }
+        mPushMsgViewModelViewModel.getData().observe(viewLifecycleOwner, mPushMsgViewModelTriggerObserver)
+        mPushMsgViewModelViewModel.getpushMsgResponseData().observe(viewLifecycleOwner, mPushMsgViewModelObserver)
         return IdeaBoardFragmentRootView
+    }
+
+    private fun showAlertDialog(error:String?) {
+        var mDialog = AlertDialog.Builder(this.context)
+            .setMessage(error)
+            .setPositiveButton("確認", object : DialogInterface.OnClickListener {
+                override fun onClick(dialog: DialogInterface?, which: Int) {
+
+                }
+            })
+        mDialog.show()
+    }
+
+    private fun collapseKeyboard() {
+        val inputMethodManager =
+            context!!.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        if (inputMethodManager != null && (context as Activity).currentFocus != null) {
+            inputMethodManager!!.hideSoftInputFromWindow(
+                (context as Activity).currentFocus!!.windowToken, HIDE_NOT_ALWAYS
+            )
+        }
     }
 
     override fun onResume() {

@@ -51,6 +51,16 @@ interface ApiInterface {
         @Header("Authorization") token: String,
         @Body body: DataModel.PushGoodBody
     ): Call<DataModel.ResponsePushGood>
+
+    @Headers(
+        "Accept: application/json",
+        "Content-Type: application/json"
+    )
+    @POST("api/frontboard")
+    fun pushMsg(
+        @Header("Authorization") token: String,
+        @Body body: DataModel.PushMsgBody
+    ): Call<DataModel.ResponsePushMsg>
 ////=========================================
 ////    @Headers(
 ////        "Accept: application/json",

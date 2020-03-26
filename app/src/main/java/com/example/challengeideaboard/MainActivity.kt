@@ -1,5 +1,7 @@
 package com.example.challengeideaboard
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -22,7 +24,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var mLogoutViewModelTriggerObserver: Observer<Int>
     lateinit var mLogoutViewModelObserver: Observer<DataModel.ResponseLogout>
 
-
+    lateinit var mBoardViewModelViewModel: BoardViewModel
+    lateinit var mBoardViewModelTriggerObserver: Observer<Int>
+    lateinit var mBoardViewModelObserver: Observer<DataModel.ResponseBoard>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         checkLogin()
         LoginTextView.setOnClickListener { gotoLogin() }
         LogoutTextView.setOnClickListener { gotoLogout() }
-
+        appTitleTextView.setOnClickListener { gotoRefreshBoard() }
         mLogoutViewModelViewModel= ViewModelProvider(this).get(LogoutViewModel::class.java)
         mLogoutViewModelTriggerObserver = Observer {
             when(it){
@@ -57,8 +61,38 @@ class MainActivity : AppCompatActivity() {
         mLogoutViewModelViewModel.getData().observe(this, mLogoutViewModelTriggerObserver)
         mLogoutViewModelViewModel.geLoginResponseData().observe(this, mLogoutViewModelObserver)
 
+        mBoardViewModelViewModel= ViewModelProvider(this).get(BoardViewModel::class.java)
+        mBoardViewModelTriggerObserver = Observer {
+            when(it){
+                0->{
 
+                }
+                200-> {
+                    GlobalLoading.hideGlobalLoading()
+                    mBoardViewModelViewModel.setBoardResponseDataTrigger(0)
+                }
+//                403-> {
+//
+//                }
+                else ->{
+                    GlobalLoading.hideGlobalLoading()
+//                    var error=mBoardViewModelViewModel.getErrorMessage().value
+                    var error="請求失敗"
+                    showAlertDialog(error)
+                }
+            }
+        }
+        mBoardViewModelObserver = Observer {
+//            mAdapter.updateData(it.all)
+        }
+        mBoardViewModelViewModel.getData().observe(this, mBoardViewModelTriggerObserver)
+        mBoardViewModelViewModel.getBoardResponseData().observe(this, mBoardViewModelObserver)
 
+    }
+
+    private fun gotoRefreshBoard() {
+        mBoardViewModelViewModel.RequestBoard()
+        GlobalLoading.showGlobalLoading(this)
     }
 
     override fun onResume() {
@@ -103,5 +137,15 @@ class MainActivity : AppCompatActivity() {
 //        action.addToBackStack(null)
         action.commit()
 
+    }
+    private fun showAlertDialog(error:String?) {
+        var mDialog = AlertDialog.Builder(this)
+            .setMessage(error)
+            .setPositiveButton("確認", object : DialogInterface.OnClickListener {
+                override fun onClick(dialog: DialogInterface?, which: Int) {
+
+                }
+            })
+        mDialog.show()
     }
 }

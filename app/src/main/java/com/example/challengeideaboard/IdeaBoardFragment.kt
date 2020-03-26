@@ -146,7 +146,7 @@ class IdeaBoardFragment : Fragment() {
         IdeaBoardFragmentRootView.boardRecyclerView.layoutManager=LinearLayoutManager(this.context)
         IdeaBoardFragmentRootView.boardRecyclerView.adapter = mAdapter
 
-        mBoardViewModelViewModel= ViewModelProvider(this).get(BoardViewModel::class.java)
+        mBoardViewModelViewModel= ViewModelProvider(activity!!).get(BoardViewModel::class.java)
         mBoardViewModelTriggerObserver = Observer {
             when(it){
                 0->{

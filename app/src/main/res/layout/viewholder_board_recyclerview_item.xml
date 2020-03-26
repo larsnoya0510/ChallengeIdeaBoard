@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:background="@color/colorWhite"
     android:orientation="vertical">
 
     <TextView
@@ -11,12 +13,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:text="TextView"
         android:textColor="#FF2E80E2"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
         tools:text="熱血玩台南" />
 
     <TextView
@@ -24,6 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
         android:text="TextView"
         tools:text="32分鐘" />
 
@@ -128,7 +132,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/pushMsgConstraintLayout"
+            android:id="@+id/pushReplyConstraintLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="40dp"
@@ -170,9 +174,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="15dp"
         android:background="@drawable/radius_shape_darkgray"
         android:hint="留言..." />
 

@@ -205,6 +205,72 @@ object DataModel {
         @SerializedName("id")
         val id: Int
     )
+    data class PushReplyBody(
+        var token: String,
+        var board_id :Int,
+        var msg_user: String,
+        var msg: String
+    )
+    data class ResponsePushReply(
+        @Expose
+        @SerializedName("info")
+        val info: String,
+        @Expose
+        @SerializedName("msg")
+        val msg: Msg?
+    )
+    data class Msg(
+        @Expose
+        @SerializedName("boards_id")
+        val boards_id: String,
+        @Expose
+        @SerializedName("msg_user")
+        val msg_user: String,
+        @Expose
+        @SerializedName("msg")
+        val msg: String,
+        @Expose
+        @SerializedName("create_time")
+        val create_time: String,
+        @Expose
+        @SerializedName("id")
+        val id: Int
+    )
+    data class PushReplySecondBody(
+        var token: String,
+        var board_id :Int,
+        var msg_id :Int,
+        var remsg_user: String,
+        var remsg: String
+    )
+    data class ResponsePushReplySecond(
+        @Expose
+        @SerializedName("info")
+        val info: String,
+        @Expose
+        @SerializedName("remsg")
+        val remsg: Remsg?
+    )
+    data class Remsg(
+        @Expose
+        @SerializedName("boards_id")
+        val boards_id: String,
+        @Expose
+        @SerializedName("msg_id")
+        val msg_id: String,
+        @Expose
+        @SerializedName("remsg_user")
+        val remsg_user: String,
+        @Expose
+        @SerializedName("remsg")
+        val remsg: String,
+        @Expose
+        @SerializedName("create_time")
+        val create_time: String,
+        @Expose
+        @SerializedName("id")
+        val id: Int
+    )
 ///=============================
 
 //    data class Address(

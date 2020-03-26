@@ -61,6 +61,26 @@ interface ApiInterface {
         @Header("Authorization") token: String,
         @Body body: DataModel.PushMsgBody
     ): Call<DataModel.ResponsePushMsg>
+
+    @Headers(
+        "Accept: application/json",
+        "Content-Type: application/json"
+    )
+    @POST("api/frontmsg")
+    fun pushReply(
+        @Header("Authorization") token: String,
+        @Body body: DataModel.PushReplyBody
+    ): Call<DataModel.ResponsePushReply>
+
+    @Headers(
+        "Accept: application/json",
+        "Content-Type: application/json"
+    )
+    @POST("api/frontremsg")
+    fun pushReplySecond(
+        @Header("Authorization") token: String,
+        @Body body: DataModel.PushReplySecondBody
+    ): Call<DataModel.ResponsePushReplySecond>
 ////=========================================
 ////    @Headers(
 ////        "Accept: application/json",

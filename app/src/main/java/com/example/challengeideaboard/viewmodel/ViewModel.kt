@@ -212,3 +212,71 @@ class PushMsgViewModel() : ViewModel() {
         return errorMessage
     }
 }
+class PushReplyViewModel() : ViewModel() {
+    private var pushReplyResponseData = MutableLiveData<DataModel.ResponsePushReply>()
+    private var pushReplyResponseDataTrigger = MutableLiveData<Int>()
+    private var errorMessage = MutableLiveData<String>()
+    fun RequestPushReply(token:String,board_id:Int,msg_user:String,msg:String){
+        APIFunction.pushReply(DataModel.PushReplyBody(token,board_id,msg_user,msg),this)
+    }
+    fun setPushReplyResponseDataTrigger(result: Int,mData: DataModel.ResponsePushReply) {
+        pushReplyResponseDataTrigger.value=result
+        setResponse(mData)
+    }
+    fun setPushReplyResponseDataTrigger(result: Int) {
+        pushReplyResponseDataTrigger.value=result
+    }
+    fun setPushReplyResponseDataTrigger(result: Int,mErrorMeaasge:String) {
+        pushReplyResponseDataTrigger.value=result
+        setErrorMessage(mErrorMeaasge)
+    }
+    fun setErrorMessage(mErrorMeaasge:String){
+        errorMessage.value=mErrorMeaasge
+    }
+    fun setResponse( mData: DataModel.ResponsePushReply) {
+        pushReplyResponseData.value=mData
+    }
+    fun getpushReplyResponseData(): MutableLiveData<DataModel.ResponsePushReply> {
+        return pushReplyResponseData
+    }
+    fun getData(): MutableLiveData<Int> {
+        return pushReplyResponseDataTrigger
+    }
+    fun getErrorMessage(): MutableLiveData<String> {
+        return errorMessage
+    }
+}
+class PushReplySecondViewModel() : ViewModel() {
+    private var pushReplySecondResponseData = MutableLiveData<DataModel.ResponsePushReplySecond>()
+    private var pushReplySecondResponseDataTrigger = MutableLiveData<Int>()
+    private var errorMessage = MutableLiveData<String>()
+    fun RequestPushReplySecond(token:String,board_id:Int,msg_id:Int,remsg_user:String,remsg:String){
+        APIFunction.pushReplySecond(DataModel.PushReplySecondBody(token,board_id,msg_id,remsg_user,remsg),this)
+    }
+    fun setPushReplySecondResponseDataTrigger(result: Int,mData: DataModel.ResponsePushReplySecond) {
+        pushReplySecondResponseDataTrigger.value=result
+        setResponse(mData)
+    }
+    fun setPushReplySecondResponseDataTrigger(result: Int) {
+        pushReplySecondResponseDataTrigger.value=result
+    }
+    fun setPushReplySecondResponseDataTrigger(result: Int,mErrorMeaasge:String) {
+        pushReplySecondResponseDataTrigger.value=result
+        setErrorMessage(mErrorMeaasge)
+    }
+    fun setErrorMessage(mErrorMeaasge:String){
+        errorMessage.value=mErrorMeaasge
+    }
+    fun setResponse( mData: DataModel.ResponsePushReplySecond) {
+        pushReplySecondResponseData.value=mData
+    }
+    fun getpushReplySecondResponseData(): MutableLiveData<DataModel.ResponsePushReplySecond> {
+        return pushReplySecondResponseData
+    }
+    fun getData(): MutableLiveData<Int> {
+        return pushReplySecondResponseDataTrigger
+    }
+    fun getErrorMessage(): MutableLiveData<String> {
+        return errorMessage
+    }
+}

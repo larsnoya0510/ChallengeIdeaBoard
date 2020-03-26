@@ -46,7 +46,7 @@ class ReplySecondRecyclerViewAdapter(
 
         fun bind(position: Int) {
             var nameLength=mInList[position].remsg_user.length
-            val spannable = SpannableStringBuilder("${mInList[position].remsg_user}${mInList[position].remsg}")
+            val spannable = SpannableStringBuilder("${mInList[position].remsg_user}  ${mInList[position].remsg}")
             spannable.setSpan(ForegroundColorSpan(Color.BLUE),0,nameLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
             replyTextView.setText(spannable)
@@ -61,6 +61,7 @@ class ReplySecondRecyclerViewAdapter(
     interface OnItemCheckListener {
 //        fun onCheck(workId: Int)
 //        fun onStarClick(workId: Int, mutableList: MutableList<DataModel.EditorRecommandItem>,collectionState:Int)
+
     }
 
     fun setOnItemCheckListener(mOnItemCheckListener: OnItemCheckListener) {

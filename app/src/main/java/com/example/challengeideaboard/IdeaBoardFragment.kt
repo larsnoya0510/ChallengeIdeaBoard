@@ -30,6 +30,9 @@ import android.content.DialogInterface
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.ViewModel
+import com.example.challengeideaboard.utilities.MainFragmentList
+import com.example.challengeideaboard.viewmodel.PushReplyViewModel
+import com.google.gson.Gson
 
 
 /**
@@ -48,14 +51,18 @@ class IdeaBoardFragment : Fragment() {
     lateinit var mPushMsgViewModelTriggerObserver: Observer<Int>
     lateinit var mPushMsgViewModelObserver: Observer<DataModel.ResponsePushMsg>
 
+
+
     lateinit var IdeaBoardFragmentRootView:View
     lateinit var mAdapter:BoardRecyclerViewAdapter
+    lateinit var mFragmentList:MainFragmentList
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         IdeaBoardFragmentRootView= inflater.inflate(R.layout.fragment_idea_board, container, false)
+        mFragmentList= (activity as MainActivity).mFragmentList
 //        IdeaBoardFragmentRootView.postEditText.setImeOptions(EditorInfo.IME_ACTION_SEND)
         IdeaBoardFragmentRootView.postEditText.setInputType(TYPE_TEXT_FLAG_MULTI_LINE)
         IdeaBoardFragmentRootView.postEditText.setSingleLine(false)
@@ -76,9 +83,36 @@ class IdeaBoardFragment : Fragment() {
         }
         mAdapter=BoardRecyclerViewAdapter(this.context!!, mutableListOf<DataModel.BoardItem>())
         mAdapter.setOnItemCheckListener(object : BoardRecyclerViewAdapter.OnItemCheckListener{
-            override fun onClickMsg(mUserName: String, mContent: String) {
-
+            override fun onOpenReply(mData: DataModel.BoardItem) {
+                if(SharePreferenceUtil.getUserToken(context!!).isNullOrEmpty()){
+                    Toast.makeText(context,"請先登入",Toast.LENGTH_SHORT).show()
+                }
+                else {
+                    var mBundle = Bundle()
+                    mBundle.putSerializable("Data", Gson().toJson(mData))
+                    mFragmentList.mReplyFirstFragment.arguments = mBundle
+                    var action = this@IdeaBoardFragment.fragmentManager!!.beginTransaction()
+                    action.replace(
+                        R.id.fragmentContainer,
+                        mFragmentList.mReplyFirstFragment
+                    )
+                    action.addToBackStack(null)
+                    action.commit()
+                }
             }
+
+            override fun onClickReply(mBoardId: Int, mUserName: String, mMsg: String) {
+
+                if(SharePreferenceUtil.getUserToken(context!!).isNullOrEmpty()){
+                    Toast.makeText(context,"請先登入",Toast.LENGTH_SHORT).show()
+                }
+                else {
+//                    var token="Bearer ${SharePreferenceUtil.getUserToken(context!!)}"
+//                    mPushReplyViewModelViewModel.RequestPushReply(token, mBoardId, mUserName,mMsg)
+
+                }
+            }
+
 
             override fun onCLickGood(mBoardId: Int, mUserName: String) {
                 var token="Bearer ${SharePreferenceUtil.getUserToken(context!!)}"
@@ -97,6 +131,9 @@ class IdeaBoardFragment : Fragment() {
         mBoardViewModelViewModel= ViewModelProvider(this).get(BoardViewModel::class.java)
         mBoardViewModelTriggerObserver = Observer {
             when(it){
+                0->{
+
+                }
                 200-> {
                     mBoardViewModelViewModel.setBoardResponseDataTrigger(0)
                 }
@@ -104,7 +141,8 @@ class IdeaBoardFragment : Fragment() {
 //
 //                }
                 else ->{
-                    var error=mBoardViewModelViewModel.getErrorMessage().value
+//                    var error=mBoardViewModelViewModel.getErrorMessage().value
+                    var error="請求失敗"
                     showAlertDialog(error)
                 }
             }
@@ -118,6 +156,9 @@ class IdeaBoardFragment : Fragment() {
         mPushGoodViewModelViewModel= ViewModelProvider(this).get(PushGoodViewModel::class.java)
         mPushGoodViewModelTriggerObserver = Observer {
             when(it){
+                0->{
+
+                }
                 200-> {
                     mPushGoodViewModelViewModel.setPushGoodResponseDataTrigger(0)
                 }
@@ -125,7 +166,8 @@ class IdeaBoardFragment : Fragment() {
 //
 //                }
                 else ->{
-                    var error=mPushGoodViewModelViewModel.getErrorMessage().value
+//                    var error=mPushGoodViewModelViewModel.getErrorMessage().value
+                    var error="請求失敗"
                     showAlertDialog(error)
                 }
             }
@@ -139,6 +181,9 @@ class IdeaBoardFragment : Fragment() {
         mPushMsgViewModelViewModel= ViewModelProvider(this).get(PushMsgViewModel::class.java)
         mPushMsgViewModelTriggerObserver = Observer {
             when(it){
+                0->{
+
+                }
                 200-> {
                     mPushMsgViewModelViewModel.setPushMsgResponseDataTrigger(0)
                 }
@@ -146,7 +191,8 @@ class IdeaBoardFragment : Fragment() {
 //
 //                }
                 else ->{
-                    var error=mPushMsgViewModelViewModel.getErrorMessage().value
+//                    var error=mPushMsgViewModelViewModel.getErrorMessage().value
+                    var error="請求失敗"
                     showAlertDialog(error)
                 }
             }
@@ -156,6 +202,8 @@ class IdeaBoardFragment : Fragment() {
         }
         mPushMsgViewModelViewModel.getData().observe(viewLifecycleOwner, mPushMsgViewModelTriggerObserver)
         mPushMsgViewModelViewModel.getpushMsgResponseData().observe(viewLifecycleOwner, mPushMsgViewModelObserver)
+
+
         return IdeaBoardFragmentRootView
     }
 

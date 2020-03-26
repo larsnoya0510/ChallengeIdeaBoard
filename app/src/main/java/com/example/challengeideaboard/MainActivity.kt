@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity() {
         action.replace(R.id.fragmentContainer,
             mFragmentList.mIdeaBoardFragment
         )
-        action.addToBackStack(null)
+//        action.addToBackStack(null)
         action.commit()
 
     }

@@ -156,6 +156,54 @@ class APIFunction {
                 }
             })
         }
+        fun pushReply(pushReplyBodyData: DataModel.PushReplyBody, viewModel: PushReplyViewModel) {
+            val call: Call<DataModel.ResponsePushReply> =
+                ApiClient.getClient.pushReply(pushReplyBodyData.token,pushReplyBodyData)
+            call.enqueue(object : Callback<DataModel.ResponsePushReply> {
+                override fun onResponse(
+                    call: Call<DataModel.ResponsePushReply>?,
+                    response: Response<DataModel.ResponsePushReply>
+                ) {
+                    if (response!!.isSuccessful) { // 2XX
+                        viewModel.setPushReplyResponseDataTrigger(200, response.body())
+
+                    } else {
+                        viewModel.setPushReplyResponseDataTrigger(
+                            response!!.code(),
+                            response.errorBody().string()
+                        )
+                    }
+                }
+
+                override fun onFailure(call: Call<DataModel.ResponsePushReply>?, t: Throwable?) {
+                    viewModel.setErrorMessage(APIResponseMessage.onFailure)
+                }
+            })
+        }
+        fun pushReplySecond(pushReplySecondBodyData: DataModel.PushReplySecondBody, viewModel: PushReplySecondViewModel) {
+            val call: Call<DataModel.ResponsePushReplySecond> =
+                ApiClient.getClient.pushReplySecond(pushReplySecondBodyData.token,pushReplySecondBodyData)
+            call.enqueue(object : Callback<DataModel.ResponsePushReplySecond> {
+                override fun onResponse(
+                    call: Call<DataModel.ResponsePushReplySecond>?,
+                    response: Response<DataModel.ResponsePushReplySecond>
+                ) {
+                    if (response!!.isSuccessful) { // 2XX
+                        viewModel.setPushReplySecondResponseDataTrigger(200, response.body())
+
+                    } else {
+                        viewModel.setPushReplySecondResponseDataTrigger(
+                            response!!.code(),
+                            response.errorBody().string()
+                        )
+                    }
+                }
+
+                override fun onFailure(call: Call<DataModel.ResponsePushReplySecond>?, t: Throwable?) {
+                    viewModel.setErrorMessage(APIResponseMessage.onFailure)
+                }
+            })
+        }
     }
 
 }

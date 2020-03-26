@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.challengeideaboard.api_network.DataModel
 import android.text.SpannableStringBuilder
@@ -48,20 +47,20 @@ class ReplyFirstRecyclerViewAdapter(
         var secondReplyRecyclerView = view.findViewById<RecyclerView>(R.id.secondReplyRecyclerView)
 //        var pushGoodConstraintLayout = view.findViewById<ConstraintLayout>(R.id.pushGoodConstraintLayout)
 //        var pushMsgConstraintLayout = view.findViewById<ConstraintLayout>(R.id.pushMsgConstraintLayout)
-//        var msgTagTextView = view.findViewById<TextView>(R.id.msgTagTextView)
+        var clickReplyTextView = view.findViewById<TextView>(R.id.clickReplyTextView)
 
         fun bind(position: Int) {
             var nameLength=mInList[position].msg_user.length
-            val spannable = SpannableStringBuilder("${mInList[position].msg_user}${mInList[position].msg}")
+            val spannable = SpannableStringBuilder("${mInList[position].msg_user}  ${mInList[position].msg}")
             spannable.setSpan(ForegroundColorSpan(Color.BLUE),0,nameLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
             replyTextView.setText(spannable)
             createTimeTextView.text=mInList[position].create_time
             secondReplyRecyclerView.layoutManager= LinearLayoutManager(context)
             secondReplyRecyclerView.adapter=ReplySecondRecyclerViewAdapter(context,mInList[position].remsgs)
-//            cardViewLinearLayout.setOnClickListener {
-//                mOnItemCheckListener!!.onCheck(mInList[position].book_id)
-//            }
+            clickReplyTextView.setOnClickListener {
+                mOnItemCheckListener!!.OnOpenReplySecond(mInList[position])
+            }
 //            worksDateTextView.text = mInList[position].updated_at
         }
     }
@@ -71,8 +70,7 @@ class ReplyFirstRecyclerViewAdapter(
     }
 
     interface OnItemCheckListener {
-//        fun onCheck(workId: Int)
-//        fun onStarClick(workId: Int, mutableList: MutableList<DataModel.EditorRecommandItem>,collectionState:Int)
+            fun OnOpenReplySecond(mData:DataModel.MsgsItem)
     }
 
     fun setOnItemCheckListener(mOnItemCheckListener: OnItemCheckListener) {

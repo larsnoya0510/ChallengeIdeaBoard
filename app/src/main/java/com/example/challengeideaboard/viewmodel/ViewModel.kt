@@ -280,3 +280,37 @@ class PushReplySecondViewModel() : ViewModel() {
         return errorMessage
     }
 }
+class GetGoodViewModel() : ViewModel() {
+    private var getGoodResponseData = MutableLiveData<DataModel.ResponseGetGood>()
+    private var getGoodResponseDataTrigger = MutableLiveData<Int>()
+    private var errorMessage = MutableLiveData<String>()
+    fun RequestGetGood(token:String,board_id:Int){
+        APIFunction.getGood(DataModel.GetGoodBody(token,board_id),this)
+    }
+    fun setGetGoodResponseDataTrigger(result: Int,mData: DataModel.ResponseGetGood) {
+        getGoodResponseDataTrigger.value=result
+        setResponse(mData)
+    }
+    fun setGetGoodResponseDataTrigger(result: Int) {
+        getGoodResponseDataTrigger.value=result
+    }
+    fun setGetGoodResponseDataTrigger(result: Int,mErrorMeaasge:String) {
+        getGoodResponseDataTrigger.value=result
+        setErrorMessage(mErrorMeaasge)
+    }
+    fun setErrorMessage(mErrorMeaasge:String){
+        errorMessage.value=mErrorMeaasge
+    }
+    fun setResponse( mData: DataModel.ResponseGetGood) {
+        getGoodResponseData.value=mData
+    }
+    fun getgetGoodResponseData(): MutableLiveData<DataModel.ResponseGetGood> {
+        return getGoodResponseData
+    }
+    fun getData(): MutableLiveData<Int> {
+        return getGoodResponseDataTrigger
+    }
+    fun getErrorMessage(): MutableLiveData<String> {
+        return errorMessage
+    }
+}

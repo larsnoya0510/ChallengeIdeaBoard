@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -51,7 +52,7 @@ class BoardRecyclerViewAdapter(
         var replyFirstRecyclerView = view.findViewById<RecyclerView>(R.id.replyFirstRecyclerView)
         var pushGoodConstraintLayout = view.findViewById<ConstraintLayout>(R.id.pushGoodConstraintLayout)
         var pushReplyConstraintLayout = view.findViewById<ConstraintLayout>(R.id.pushReplyConstraintLayout)
-        var msgTagTextView = view.findViewById<TextView>(R.id.msgTagTextView)
+        var viewGoodConstraintLayout = view.findViewById<ConstraintLayout>(R.id.viewGoodConstraintLayout)
 
         fun bind(position: Int) {
             authorTextView.text=mInList[position].author
@@ -88,8 +89,10 @@ class BoardRecyclerViewAdapter(
                 mOnItemCheckListener!!.onCLickGood(mInList[position].id, SharePreferenceUtil.getUser(context))
             }
             pushReplyConstraintLayout.setOnClickListener {
-//                mOnItemCheckListener!!.onClickReply(mInList[position].id,SharePreferenceUtil.getUser(context),msgTagTextView.text.toString())
                 mOnItemCheckListener!!.onOpenReply(mInList[position])
+            }
+            viewGoodConstraintLayout.setOnClickListener {
+                mOnItemCheckListener!!.onOpenGoodView(mInList[position].id)
             }
         }
     }
@@ -104,6 +107,7 @@ class BoardRecyclerViewAdapter(
         fun onCLickGood(mBoardId: Int,mUserName :String)
         fun onClickReply(mBoardId: Int,mUserName :String,mMsg: String)
         fun onOpenReply(mData:DataModel.BoardItem)
+        fun onOpenGoodView(mBoardId: Int)
     }
 
     fun setOnItemCheckListener(mOnItemCheckListener: OnItemCheckListener) {

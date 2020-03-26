@@ -54,24 +54,37 @@
         android:layout_width="match_parent"
         android:layout_height="50dp">
 
-        <ImageView
-            android:id="@+id/viewGoodImageView"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/viewGoodConstraintLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginStart="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/goodicon" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/goodsCountTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/viewGoodImageView"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="450" />
+            <ImageView
+                android:id="@+id/viewGoodImageView"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/goodicon" />
+
+            <TextView
+                android:id="@+id/goodsCountTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/viewGoodImageView"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="450" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/msgsCountTextView"

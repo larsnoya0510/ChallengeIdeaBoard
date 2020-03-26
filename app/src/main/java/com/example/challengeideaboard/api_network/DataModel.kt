@@ -271,6 +271,23 @@ object DataModel {
         @SerializedName("id")
         val id: Int
     )
+    data class GetGoodBody(
+        var token: String,
+        var board_id :Int
+    )
+    data class ResponseGetGood(
+        @Expose
+        @SerializedName("info")
+        val info: String,
+        @Expose
+        @SerializedName("whogood")
+        val whogood: MutableList<WhoGoodItem>?
+    )
+    data class WhoGoodItem(
+        @Expose
+        @SerializedName("user_name")
+        val user_name: String
+    )
 ///=============================
 
 //    data class Address(

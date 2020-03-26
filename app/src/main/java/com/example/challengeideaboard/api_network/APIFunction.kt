@@ -204,6 +204,31 @@ class APIFunction {
                 }
             })
         }
+        fun getGood(getGoodBodyData: DataModel.GetGoodBody, viewModel: GetGoodViewModel) {
+            val call: Call<DataModel.ResponseGetGood> =
+                ApiClient.getClient.getGood(getGoodBodyData.token,getGoodBodyData)
+            call.enqueue(object : Callback<DataModel.ResponseGetGood> {
+                override fun onResponse(
+                    call: Call<DataModel.ResponseGetGood>?,
+                    response: Response<DataModel.ResponseGetGood>
+                ) {
+                    if (response!!.isSuccessful) { // 2XX
+                        viewModel.setGetGoodResponseDataTrigger(200, response.body())
+
+                    } else {
+                        viewModel.setGetGoodResponseDataTrigger(
+                            response!!.code(),
+                            response.errorBody().string()
+                        )
+                    }
+                }
+
+                override fun onFailure(call: Call<DataModel.ResponseGetGood>?, t: Throwable?) {
+                    viewModel.setErrorMessage(APIResponseMessage.onFailure)
+                }
+            })
+        }
     }
+
 
 }

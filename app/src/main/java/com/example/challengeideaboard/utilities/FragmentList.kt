@@ -1,9 +1,6 @@
 package com.example.challengeideaboard.utilities
 
-import com.example.challengeideaboard.IdeaBoardFragment
-import com.example.challengeideaboard.LoginFragment
-import com.example.challengeideaboard.ReplyFirstFragment
-import com.example.challengeideaboard.ReplySecondFragment
+import com.example.challengeideaboard.*
 
 
 class MainFragmentList {
@@ -11,6 +8,7 @@ class MainFragmentList {
     val mLoginFragment :LoginFragment by lazy { LoginFragment.newInstance() }
     val mReplyFirstFragment :ReplyFirstFragment by lazy { ReplyFirstFragment.newInstance() }
     val mReplySecondFragment :ReplySecondFragment by lazy { ReplySecondFragment.newInstance() }
+    val mWatchGoodFragment :WatchGoodFragment by lazy { WatchGoodFragment.newInstance() }
 }
 
 

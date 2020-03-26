@@ -68,7 +68,7 @@ class IdeaBoardFragment : Fragment() {
         IdeaBoardFragmentRootView.postEditText.setSingleLine(false)
         IdeaBoardFragmentRootView.postEditText.setMaxLines(4)
         IdeaBoardFragmentRootView.postImageView.setOnClickListener {
-            var token="Bearer ${SharePreferenceUtil.getUserToken(context!!)}111"
+            var token="Bearer ${SharePreferenceUtil.getUserToken(context!!)}"
             var user = SharePreferenceUtil.getUser(context!!)
             if(SharePreferenceUtil.getUserToken(context!!).isNullOrEmpty()){
                 Toast.makeText(context,"請先登入",Toast.LENGTH_SHORT).show()
@@ -83,6 +83,24 @@ class IdeaBoardFragment : Fragment() {
         }
         mAdapter=BoardRecyclerViewAdapter(this.context!!, mutableListOf<DataModel.BoardItem>())
         mAdapter.setOnItemCheckListener(object : BoardRecyclerViewAdapter.OnItemCheckListener{
+            override fun onOpenGoodView(mBoardId: Int) {
+                if(SharePreferenceUtil.getUserToken(context!!).isNullOrEmpty()){
+                    Toast.makeText(context,"請先登入",Toast.LENGTH_SHORT).show()
+                }
+                else {
+                    var mBundle = Bundle()
+                    mBundle.putInt("BoardId",mBoardId)
+                    mFragmentList.mWatchGoodFragment.arguments = mBundle
+                    var action = this@IdeaBoardFragment.fragmentManager!!.beginTransaction()
+                    action.replace(
+                        R.id.fragmentContainer,
+                        mFragmentList.mWatchGoodFragment
+                    )
+                    action.addToBackStack(null)
+                    action.commit()
+                }
+            }
+
             override fun onOpenReply(mData: DataModel.BoardItem) {
                 if(SharePreferenceUtil.getUserToken(context!!).isNullOrEmpty()){
                     Toast.makeText(context,"請先登入",Toast.LENGTH_SHORT).show()
@@ -165,6 +183,13 @@ class IdeaBoardFragment : Fragment() {
 //                403-> {
 //
 //                }
+                401 ->{
+                    SharePreferenceUtil.removeUser(context!!)
+                    SharePreferenceUtil.removeToken(context!!)
+                    Toast.makeText(context,"登入失效，請重新登入",Toast.LENGTH_SHORT).show()
+                    (activity as MainActivity).checkLogin()
+                    clickBackIcon()
+                }
                 else ->{
 //                    var error=mPushGoodViewModelViewModel.getErrorMessage().value
                     var error="請求失敗"
@@ -190,6 +215,13 @@ class IdeaBoardFragment : Fragment() {
 //                403-> {
 //
 //                }
+                401 ->{
+                    SharePreferenceUtil.removeUser(context!!)
+                    SharePreferenceUtil.removeToken(context!!)
+                    Toast.makeText(context,"登入失效，請重新登入",Toast.LENGTH_SHORT).show()
+                    (activity as MainActivity).checkLogin()
+                    clickBackIcon()
+                }
                 else ->{
 //                    var error=mPushMsgViewModelViewModel.getErrorMessage().value
                     var error="請求失敗"
@@ -246,5 +278,4 @@ class IdeaBoardFragment : Fragment() {
             this.activity!!.finish()
         }
     }
-
 }

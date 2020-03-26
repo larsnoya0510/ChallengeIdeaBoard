@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -54,6 +55,13 @@ lateinit var ReplyFragmentRootView:View
 //                403-> {
 //
 //                }
+                401 ->{
+                    SharePreferenceUtil.removeUser(context!!)
+                    SharePreferenceUtil.removeToken(context!!)
+                    Toast.makeText(context,"登入失效，請重新登入", Toast.LENGTH_SHORT).show()
+                    (activity as MainActivity).checkLogin()
+                    clickBackIcon()
+                }
                 else ->{
 //                    var error=mPushReplyViewModelViewModel.getErrorMessage().value
                     var error="請求失敗"

@@ -1,7 +1,11 @@
 package com.example.challengeideaboard
 
 
+import android.graphics.Color
 import android.os.Bundle
+import android.text.Editable
+import android.text.InputFilter
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +18,10 @@ import com.example.challengeideaboard.api_network.DataModel
 import com.example.challengeideaboard.api_network.SharePreferenceUtil
 import com.example.challengeideaboard.viewmodel.LoginViewModel
 import com.example.challengeideaboard.viewmodel.RegisterViewModel
+import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_login.view.*
+import kotlinx.android.synthetic.main.fragment_login.view.accountEditText
+import java.util.regex.Pattern
 
 class LoginFragment : Fragment() {
     lateinit var mLoginViewModelViewModel: LoginViewModel
@@ -31,7 +38,29 @@ class LoginFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         LoginFragmentRootView= inflater.inflate(R.layout.fragment_login, container, false)
+        LoginFragmentRootView.passwordEditText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                if (s.toString().isNullOrEmpty()) {
+                    inputVaildPasswordTextView.visibility = View.INVISIBLE
+                }
+                else if (checkPassword(s.toString())) {
+                    inputVaildPasswordTextView.visibility = View.INVISIBLE
+                    LoginFragmentRootView.registerButton.isEnabled=true
+                    LoginFragmentRootView.registerButton.setTextColor(Color.BLACK)
+                    LoginFragmentRootView.loginButton.isEnabled=true
+                    LoginFragmentRootView.loginButton.setTextColor(Color.BLACK)
+                } else {
+                    inputVaildPasswordTextView.visibility = View.VISIBLE
+                    LoginFragmentRootView.registerButton.isEnabled=false
+                    LoginFragmentRootView.loginButton.isEnabled=false
+                    LoginFragmentRootView.registerButton.setTextColor(Color.GRAY)
+                    LoginFragmentRootView.loginButton.setTextColor(Color.GRAY)
+                }
+            }
 
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
         mLoginViewModelViewModel= ViewModelProvider(this).get(LoginViewModel::class.java)
         mLoginViewModelTriggerObserver = Observer {
             when(it){
@@ -91,12 +120,24 @@ class LoginFragment : Fragment() {
     fun requestLogin(){
         var userName=LoginFragmentRootView.accountEditText.text.toString()
         var password=LoginFragmentRootView.passwordEditText.text.toString()
-        mLoginViewModelViewModel.RequestLogin(userName,password)
+        if(!userName.isNullOrEmpty() && !password.isNullOrEmpty()){
+            mLoginViewModelViewModel.RequestLogin(userName,password)
+        }
+        else{
+            Toast.makeText(this.context,"帳號或密碼不得為空",Toast.LENGTH_SHORT).show()
+        }
+
     }
     fun requestRegister(){
         var userName=LoginFragmentRootView.accountEditText.text.toString()
         var password=LoginFragmentRootView.passwordEditText.text.toString()
-        mRegisterViewModelViewModel.RequestRegister(userName,password)
+        if(!userName.isNullOrEmpty() && !password.isNullOrEmpty()){
+            mRegisterViewModelViewModel.RequestRegister(userName,password)
+        }
+        else{
+            Toast.makeText(this.context,"帳號或密碼不得為空",Toast.LENGTH_SHORT).show()
+        }
+
     }
     companion object {
         @JvmStatic
@@ -110,6 +151,13 @@ class LoginFragment : Fragment() {
         } else {
             this.activity!!.finish()
         }
+    }
+    private fun checkPassword(phoneStr: String): Boolean {
+        //var regex = "^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$";
+        var regex = "[0-9]\\d{7,19}"
+        var p = Pattern.compile(regex)
+        var m = p.matcher(phoneStr)
+        return m.find()
     }
 
 }

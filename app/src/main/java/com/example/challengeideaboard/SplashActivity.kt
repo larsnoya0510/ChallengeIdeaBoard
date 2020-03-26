@@ -15,8 +15,8 @@ class SplashActivity : AppCompatActivity() {
             Runnable {
                 Thread.sleep(3000)
                 runOnUiThread {
-                    var iv_Loading = loadingConstraintLayout
-                    iv_Loading?.visibility = View.GONE
+//                    var iv_Loading = loadingConstraintLayout
+//                    iv_Loading?.visibility = View.GONE
                     var intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                     finish()

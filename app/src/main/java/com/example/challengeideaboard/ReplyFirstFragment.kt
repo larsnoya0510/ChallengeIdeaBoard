@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.challengeideaboard.adapter.ReplyFirstRecyclerViewAdapter
 import com.example.challengeideaboard.api_network.DataModel
 import com.example.challengeideaboard.api_network.SharePreferenceUtil
+import com.example.challengeideaboard.utilities.GlobalLoading
 import com.example.challengeideaboard.viewmodel.PushReplyViewModel
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_reply.view.*
@@ -46,6 +47,7 @@ lateinit var ReplyFragmentRootView:View
             mPushReplyViewModelViewModel.RequestPushReply(token, data.id, SharePreferenceUtil.getUser(this.context!!),ReplyFragmentRootView.replyEditText.text.toString())
             collapseKeyboard()
             ReplyFragmentRootView.replyEditText.text.clear()
+            GlobalLoading.showGlobalLoading(context!!)
         }
         mPushReplyViewModelViewModel= ViewModelProvider(this).get(PushReplyViewModel::class.java)
         mPushReplyViewModelTriggerObserver = Observer {
@@ -54,12 +56,14 @@ lateinit var ReplyFragmentRootView:View
 
                 }
                 200-> {
+                    GlobalLoading.hideGlobalLoading()
                     mPushReplyViewModelViewModel.setPushReplyResponseDataTrigger(0)
                 }
 //                403-> {
 //
 //                }
                 401 ->{
+                    GlobalLoading.hideGlobalLoading()
                     SharePreferenceUtil.removeUser(context!!)
                     SharePreferenceUtil.removeToken(context!!)
                     Toast.makeText(context,"登入失效，請重新登入", Toast.LENGTH_SHORT).show()
@@ -67,6 +71,7 @@ lateinit var ReplyFragmentRootView:View
                     clickBackIcon()
                 }
                 else ->{
+                    GlobalLoading.hideGlobalLoading()
 //                    var error=mPushReplyViewModelViewModel.getErrorMessage().value
                     var error="請求失敗"
                     showAlertDialog(error)

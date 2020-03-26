@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.example.challengeideaboard.api_network.DataModel
 import com.example.challengeideaboard.api_network.SharePreferenceUtil
+import com.example.challengeideaboard.utilities.GlobalLoading
 import com.example.challengeideaboard.utilities.MainFragmentList
 import com.example.challengeideaboard.viewmodel.BoardViewModel
 import com.example.challengeideaboard.viewmodel.LoginViewModel
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         mFragmentList = MainFragmentList()
+        GlobalLoading.showGlobalLoading(this!!)
         initView()
         checkLogin()
         LoginTextView.setOnClickListener { gotoLogin() }
@@ -58,6 +60,12 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
+    override fun onResume() {
+        super.onResume()
+
+    }
+
     fun checkLogin(){
         if(SharePreferenceUtil.getUserToken(this).isNullOrEmpty()){
             LoginTextView.visibility= View.VISIBLE

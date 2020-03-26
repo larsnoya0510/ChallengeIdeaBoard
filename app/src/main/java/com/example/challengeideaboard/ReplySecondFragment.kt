@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.challengeideaboard.adapter.ReplySecondRecyclerViewAdapter
 import com.example.challengeideaboard.api_network.DataModel
 import com.example.challengeideaboard.api_network.SharePreferenceUtil
+import com.example.challengeideaboard.utilities.GlobalLoading
 import com.example.challengeideaboard.viewmodel.PushReplySecondViewModel
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_reply_second.view.*
@@ -46,6 +47,7 @@ lateinit var ReplySecondFragmentRootView:View
             mPushReplySecondViewModelViewModel.RequestPushReplySecond(token, data.boards_id,data.id, SharePreferenceUtil.getUser(this.context!!),ReplySecondFragmentRootView.replySecondEditText.text.toString())
             collapseKeyboard()
             ReplySecondFragmentRootView.replySecondEditText.text.clear()
+            GlobalLoading.showGlobalLoading(context!!)
         }
         mPushReplySecondViewModelViewModel= ViewModelProvider(this).get(PushReplySecondViewModel::class.java)
         mPushReplySecondViewModelTriggerObserver = Observer {
@@ -54,12 +56,14 @@ lateinit var ReplySecondFragmentRootView:View
 
                 }
                 200-> {
+                    GlobalLoading.hideGlobalLoading()
                     mPushReplySecondViewModelViewModel.setPushReplySecondResponseDataTrigger(0)
                 }
 //                403-> {
 //
 //                }
                 401 ->{
+                    GlobalLoading.hideGlobalLoading()
                     SharePreferenceUtil.removeUser(context!!)
                     SharePreferenceUtil.removeToken(context!!)
                     Toast.makeText(context,"登入失效，請重新登入", Toast.LENGTH_SHORT).show()
@@ -67,6 +71,7 @@ lateinit var ReplySecondFragmentRootView:View
                     clickBackIcon()
                 }
                 else ->{
+                    GlobalLoading.hideGlobalLoading()
 //                    var error=mPushReplyViewModelViewModel.getErrorMessage().value
                     var error="請求失敗"
                     showAlertDialog(error)

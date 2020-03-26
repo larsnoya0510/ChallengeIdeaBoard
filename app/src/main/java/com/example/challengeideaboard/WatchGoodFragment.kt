@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.challengeideaboard.adapter.WatchGoodRecyclerViewAdapter
 import com.example.challengeideaboard.api_network.DataModel
 import com.example.challengeideaboard.api_network.SharePreferenceUtil
+import com.example.challengeideaboard.utilities.GlobalLoading
 import com.example.challengeideaboard.viewmodel.GetGoodViewModel
 import kotlinx.android.synthetic.main.fragment_watch_good.view.*
 
@@ -48,12 +49,14 @@ class WatchGoodFragment : Fragment() {
 
                 }
                 200-> {
+                    GlobalLoading.hideGlobalLoading()
                     mGetGoodViewModelViewModel.setGetGoodResponseDataTrigger(0)
                 }
 //                403-> {
 //
 //                }
                 401 ->{
+                    GlobalLoading.hideGlobalLoading()
                     SharePreferenceUtil.removeUser(context!!)
                     SharePreferenceUtil.removeToken(context!!)
                     Toast.makeText(context,"登入失效，請重新登入",Toast.LENGTH_SHORT).show()
@@ -61,6 +64,7 @@ class WatchGoodFragment : Fragment() {
                     clickBackIcon()
                 }
                 else ->{
+                    GlobalLoading.hideGlobalLoading()
 //                    var error=mGetGoodViewModelViewModel.getErrorMessage().value
                     var error="請求失敗"
                     showAlertDialog(error)
@@ -79,6 +83,7 @@ class WatchGoodFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         var token="Bearer ${SharePreferenceUtil.getUserToken(context!!)}"
+        GlobalLoading.showGlobalLoading(context!!)
         mGetGoodViewModelViewModel.RequestGetGood(token,mBoardId)
     }
 

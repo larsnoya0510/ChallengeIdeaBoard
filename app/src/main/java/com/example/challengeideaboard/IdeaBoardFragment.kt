@@ -24,6 +24,7 @@ import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.DialogInterface
 import android.view.inputmethod.InputMethodManager
 import com.example.challengeideaboard.adapter.BoardRecyclerViewAdapter
+import com.example.challengeideaboard.utilities.GlobalLoading
 import com.example.challengeideaboard.utilities.MainFragmentList
 import com.google.gson.Gson
 
@@ -67,10 +68,13 @@ class IdeaBoardFragment : Fragment() {
                 Toast.makeText(context,"請先登入",Toast.LENGTH_SHORT).show()
             }
             else {
-                mPushMsgViewModelViewModel.RequestPushMsg(token, user, IdeaBoardFragmentRootView.postEditText.text.toString())
-                //            Toast.makeText(context,IdeaBoardFragmentRootView.postEditText.text.toString(),Toast.LENGTH_SHORT).show()
-                collapseKeyboard()
-                IdeaBoardFragmentRootView.postEditText.text.clear()
+                var msg=IdeaBoardFragmentRootView.postEditText.text.toString()
+                if(!msg.isNullOrEmpty()) {
+                    mPushMsgViewModelViewModel.RequestPushMsg(token, user, msg)
+                    collapseKeyboard()
+                    IdeaBoardFragmentRootView.postEditText.text.clear()
+                    GlobalLoading.showGlobalLoading(context!!)
+                }
             }
 
         }
@@ -149,12 +153,14 @@ class IdeaBoardFragment : Fragment() {
 
                 }
                 200-> {
+                    GlobalLoading.hideGlobalLoading()
                     mBoardViewModelViewModel.setBoardResponseDataTrigger(0)
                 }
 //                403-> {
 //
 //                }
                 else ->{
+                    GlobalLoading.hideGlobalLoading()
 //                    var error=mBoardViewModelViewModel.getErrorMessage().value
                     var error="請求失敗"
                     showAlertDialog(error)
@@ -174,12 +180,14 @@ class IdeaBoardFragment : Fragment() {
 
                 }
                 200-> {
+                    GlobalLoading.hideGlobalLoading()
                     mPushGoodViewModelViewModel.setPushGoodResponseDataTrigger(0)
                 }
 //                403-> {
 //
 //                }
                 401 ->{
+                    GlobalLoading.hideGlobalLoading()
                     SharePreferenceUtil.removeUser(context!!)
                     SharePreferenceUtil.removeToken(context!!)
                     Toast.makeText(context,"登入失效，請重新登入",Toast.LENGTH_SHORT).show()
@@ -187,7 +195,7 @@ class IdeaBoardFragment : Fragment() {
                     clickBackIcon()
                 }
                 else ->{
-//                    var error=mPushGoodViewModelViewModel.getErrorMessage().value
+                    GlobalLoading.hideGlobalLoading()
                     var error="請求失敗"
                     showAlertDialog(error)
                 }
@@ -206,12 +214,14 @@ class IdeaBoardFragment : Fragment() {
 
                 }
                 200-> {
+                    GlobalLoading.hideGlobalLoading()
                     mPushMsgViewModelViewModel.setPushMsgResponseDataTrigger(0)
                 }
 //                403-> {
 //
 //                }
                 401 ->{
+                    GlobalLoading.hideGlobalLoading()
                     SharePreferenceUtil.removeUser(context!!)
                     SharePreferenceUtil.removeToken(context!!)
                     Toast.makeText(context,"登入失效，請重新登入",Toast.LENGTH_SHORT).show()
@@ -219,6 +229,7 @@ class IdeaBoardFragment : Fragment() {
                     clickBackIcon()
                 }
                 else ->{
+                    GlobalLoading.hideGlobalLoading()
 //                    var error=mPushMsgViewModelViewModel.getErrorMessage().value
                     var error="請求失敗"
                     showAlertDialog(error)
@@ -260,7 +271,6 @@ class IdeaBoardFragment : Fragment() {
         super.onResume()
         mBoardViewModelViewModel.RequestBoard()
     }
-
     companion object {
         @JvmStatic
         fun newInstance() = IdeaBoardFragment()

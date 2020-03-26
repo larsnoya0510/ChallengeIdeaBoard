@@ -12,9 +12,9 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.challengeideaboard.adapter.WatchGoodRecyclerViewAdapter
 import com.example.challengeideaboard.api_network.DataModel
 import com.example.challengeideaboard.api_network.SharePreferenceUtil
-import com.example.challengeideaboard.viewmodel.BoardViewModel
 import com.example.challengeideaboard.viewmodel.GetGoodViewModel
 import kotlinx.android.synthetic.main.fragment_watch_good.view.*
 
@@ -34,7 +34,10 @@ class WatchGoodFragment : Fragment() {
         // Inflate the layout for this fragment
         mBoardId=arguments!!.getInt("BoardId") ?: -99
         WatchGoodFragmentRootView= inflater.inflate(R.layout.fragment_watch_good, container, false)
-        mAdapter=WatchGoodRecyclerViewAdapter(context!!, mutableListOf<DataModel.WhoGoodItem>())
+        mAdapter= WatchGoodRecyclerViewAdapter(
+            context!!,
+            mutableListOf<DataModel.WhoGoodItem>()
+        )
         WatchGoodFragmentRootView.watchGoodRecyclerView.layoutManager=LinearLayoutManager(context)
         WatchGoodFragmentRootView.watchGoodRecyclerView.adapter=mAdapter
 

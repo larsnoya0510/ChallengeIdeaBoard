@@ -1,16 +1,12 @@
 package com.example.challengeideaboard
 
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE
-import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -24,14 +20,11 @@ import kotlinx.android.synthetic.main.fragment_idea_board.view.*
 import android.view.inputmethod.InputMethodManager.HIDE_NOT_ALWAYS
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.Context
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.DialogInterface
 import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.lifecycle.ViewModel
+import com.example.challengeideaboard.adapter.BoardRecyclerViewAdapter
 import com.example.challengeideaboard.utilities.MainFragmentList
-import com.example.challengeideaboard.viewmodel.PushReplyViewModel
 import com.google.gson.Gson
 
 
@@ -54,7 +47,7 @@ class IdeaBoardFragment : Fragment() {
 
 
     lateinit var IdeaBoardFragmentRootView:View
-    lateinit var mAdapter:BoardRecyclerViewAdapter
+    lateinit var mAdapter: BoardRecyclerViewAdapter
     lateinit var mFragmentList:MainFragmentList
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -81,7 +74,10 @@ class IdeaBoardFragment : Fragment() {
             }
 
         }
-        mAdapter=BoardRecyclerViewAdapter(this.context!!, mutableListOf<DataModel.BoardItem>())
+        mAdapter= BoardRecyclerViewAdapter(
+            this.context!!,
+            mutableListOf<DataModel.BoardItem>()
+        )
         mAdapter.setOnItemCheckListener(object : BoardRecyclerViewAdapter.OnItemCheckListener{
             override fun onOpenGoodView(mBoardId: Int) {
                 if(SharePreferenceUtil.getUserToken(context!!).isNullOrEmpty()){

@@ -15,13 +15,12 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.challengeideaboard.adapter.ReplySecondRecyclerViewAdapter
 import com.example.challengeideaboard.api_network.DataModel
 import com.example.challengeideaboard.api_network.SharePreferenceUtil
 import com.example.challengeideaboard.viewmodel.PushReplySecondViewModel
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.fragment_reply.view.*
 import kotlinx.android.synthetic.main.fragment_reply_second.view.*
-import kotlinx.android.synthetic.main.viewholder_first_reply_recyclerview_item.view.*
 
 class ReplySecondFragment : Fragment() {
 lateinit var ReplySecondFragmentRootView:View
@@ -37,7 +36,11 @@ lateinit var ReplySecondFragmentRootView:View
         ReplySecondFragmentRootView= inflater.inflate(R.layout.fragment_reply_second, container, false)
         data= Gson().fromJson(arguments!!.getString("MsgData"),DataModel.MsgsItem::class.java)
         ReplySecondFragmentRootView.mShowReplySecondRecyclerView.layoutManager=LinearLayoutManager(context)
-        ReplySecondFragmentRootView.mShowReplySecondRecyclerView.adapter=ReplySecondRecyclerViewAdapter(context!!,data.remsgs)
+        ReplySecondFragmentRootView.mShowReplySecondRecyclerView.adapter=
+            ReplySecondRecyclerViewAdapter(
+                context!!,
+                data.remsgs
+            )
         ReplySecondFragmentRootView.replySecondImageView.setOnClickListener {
             var token="Bearer ${SharePreferenceUtil.getUserToken(context!!)}"
             mPushReplySecondViewModelViewModel.RequestPushReplySecond(token, data.boards_id,data.id, SharePreferenceUtil.getUser(this.context!!),ReplySecondFragmentRootView.replySecondEditText.text.toString())

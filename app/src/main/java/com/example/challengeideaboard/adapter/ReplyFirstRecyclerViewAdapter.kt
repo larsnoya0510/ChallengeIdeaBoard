@@ -1,4 +1,4 @@
-package com.example.challengeideaboard
+package com.example.challengeideaboard.adapter
 
 import android.content.Context
 import android.graphics.Color
@@ -12,6 +12,7 @@ import com.example.challengeideaboard.api_network.DataModel
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.challengeideaboard.R
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -61,7 +62,11 @@ class ReplyFirstRecyclerViewAdapter(
 //            createTimeTextView.text=mInList[position].create_time
             createTimeTextView.text=dateDiff( Date(System.currentTimeMillis()),stringTimetoData(mInList[position].create_time))
             secondReplyRecyclerView.layoutManager= LinearLayoutManager(context)
-            secondReplyRecyclerView.adapter=ReplySecondRecyclerViewAdapter(context,mInList[position].remsgs)
+            secondReplyRecyclerView.adapter=
+                ReplySecondRecyclerViewAdapter(
+                    context,
+                    mInList[position].remsgs
+                )
             clickReplyTextView.setOnClickListener {
                 mOnItemCheckListener!!.OnOpenReplySecond(mInList[position])
             }

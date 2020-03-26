@@ -1,17 +1,17 @@
-package com.example.challengeideaboard
+package com.example.challengeideaboard.adapter
 
 import android.content.Context
 import android.os.Bundle
-import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.challengeideaboard.MainActivity
+import com.example.challengeideaboard.R
 import com.example.challengeideaboard.api_network.DataModel
 import com.example.challengeideaboard.api_network.SharePreferenceUtil
 import com.google.gson.Gson
@@ -71,7 +71,10 @@ class BoardRecyclerViewAdapter(
             msgsCountTextView.text = "${mInList[position].msgs_count.toString()}則留言"
             authorTextView.text = mInList[position].author
             replyFirstRecyclerView.layoutManager = LinearLayoutManager(context)
-            var adapter = ReplyFirstRecyclerViewAdapter(context, mInList[position].msgs)
+            var adapter = ReplyFirstRecyclerViewAdapter(
+                context,
+                mInList[position].msgs
+            )
             adapter.setOnItemCheckListener(object :
                 ReplyFirstRecyclerViewAdapter.OnItemCheckListener {
                 override fun OnOpenReplySecond(mData: DataModel.MsgsItem) {

@@ -15,12 +15,12 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.challengeideaboard.adapter.ReplyFirstRecyclerViewAdapter
 import com.example.challengeideaboard.api_network.DataModel
 import com.example.challengeideaboard.api_network.SharePreferenceUtil
 import com.example.challengeideaboard.viewmodel.PushReplyViewModel
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_reply.view.*
-import kotlinx.android.synthetic.main.viewholder_first_reply_recyclerview_item.view.*
 
 class ReplyFirstFragment : Fragment() {
 lateinit var ReplyFragmentRootView:View
@@ -36,7 +36,11 @@ lateinit var ReplyFragmentRootView:View
         ReplyFragmentRootView= inflater.inflate(R.layout.fragment_reply, container, false)
         data= Gson().fromJson(arguments!!.getString("Data"),DataModel.BoardItem::class.java)
         ReplyFragmentRootView.mShowReplyRecyclerView.layoutManager=LinearLayoutManager(context)
-        ReplyFragmentRootView.mShowReplyRecyclerView.adapter=ReplyFirstRecyclerViewAdapter(context!!,data.msgs)
+        ReplyFragmentRootView.mShowReplyRecyclerView.adapter=
+            ReplyFirstRecyclerViewAdapter(
+                context!!,
+                data.msgs
+            )
         ReplyFragmentRootView.replyImageView.setOnClickListener {
             var token="Bearer ${SharePreferenceUtil.getUserToken(context!!)}"
             mPushReplyViewModelViewModel.RequestPushReply(token, data.id, SharePreferenceUtil.getUser(this.context!!),ReplyFragmentRootView.replyEditText.text.toString())
